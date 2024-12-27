@@ -1,4 +1,6 @@
 
+let googleMapsLoaded = false;
+
 // fetch ip data
 function searchIpInfo(){
     console.log('ip api Called');
@@ -22,7 +24,27 @@ function createIpResult(ipSearchJson){
     let ipText = document.createElement('p');
     ipText.innerHTML = ipSearchJson.query;
 
+
+    let mapContainer = document.createElement('div');
+    mapContainer.setAttribute('id', 'map');
+    mapContainer.style.height = '400px';
+    mapContainer.style.width = '100%';
+    
+
     document.getElementById('createContent').appendChild(ipText);
+    document.getElementById('createContent').appendChild(mapContainer);
+
+    console.log(ipSearchJson.lat)
+    console.log(ipSearchJson.lon)
+    
+    
+    //loadGoogleMapsAPI(() => initMap(ipSearchJson.lat, ipSearchJson.lon));
+    console.log("Vor dem Aufruf von loadGoogleMapsAPI");
+    loadGoogleMapsAPI(() => {
+        console.log("Callback von loadGoogleMapsAPI wird ausgeführt");
+        console.log("Übergebene Werte:", ipSearchJson.lat, ipSearchJson.lon);
+        initMap(ipSearchJson.lat, ipSearchJson.lon);
+    });
 }
 
 // fetch dns data
@@ -34,9 +56,8 @@ function searchDns(){
     })
 }
 
+
 function createDnsResult(dnsSearchJson){
-    //clear Div
-    document.getElementById('createContentDns').innerHTML = '';
 
     // split information from Json "geo" into isp and location
     let inputParts = dnsSearchJson.dns.geo.split('-');
@@ -44,17 +65,46 @@ function createDnsResult(dnsSearchJson){
     let geo = inputParts[0];
     let isp = inputParts[1];
 
+    document.getElementById('dnsip').innerHTML = dnsSearchJson.dns.ip;
+    document.getElementById('dnsisp').innerHTML = isp;
+    document.getElementById('dnsgeo').innerHTML = geo;
 
+    
 
-    let dnsIP = document.createElement('p');
-    dnsIP.innerHTML = 'Dein aktueller DNS-Server hat folgende IP-Adresse: ' + dnsSearchJson.dns.ip;
-    let ispName = document.createElement('p');
-    ispName.innerHTML = 'Dein ISP ist ' + isp;
+}
 
-    let dnsGeo = document.createElement('p');
-    dnsGeo.innerHTML = 'Der DNS-Server steht in ' + geo;
+function loadGoogleMapsAPI(callback) {
+    if (googleMapsLoaded) {
+        callback();
+        return;
+    }
 
-    document.getElementById('createContentDns').appendChild(dnsIP);
-    document.getElementById('createContentDns').appendChild(ispName);
-    document.getElementById('createContentDns').appendChild(dnsGeo);
+    console.log("loadGoogleMapsAPI aufgerufen");
+    let script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBeJLY88Z0YpMHP3NXuSnNuZNsUmAfhdgg&callback=googleMapsCallback`;
+    script.async = true;
+    window.googleMapsCallback = () => {
+        console.log("Google Maps API geladen, Callback wird ausgeführt");
+        googleMapsLoaded = true;
+        callback();
+    };
+    document.head.appendChild(script);
+}
+
+function initMap(lat, lon) {
+    lat = parseFloat(lat);
+    lon = parseFloat(lon);
+
+    const mapElement = document.getElementById('map');
+    const map = new google.maps.Map(mapElement, {
+        zoom: 12,
+        center: {lat: lat, lng: lon},
+    });
+
+    // Marker hinzufügen
+    const marker = new google.maps.Marker({
+        position: {lat: lat, lng: lon},
+        map: map,
+        title: "Standort"
+    });
 }
