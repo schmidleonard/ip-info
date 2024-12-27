@@ -2,53 +2,72 @@
 let googleMapsLoaded = false;
 
 // fetch ip data
-function searchIpInfo(){
+function searchIpInfo() {
     console.log('ip api Called');
 
 
     let searchStr = document.getElementById('searchInput').value;
     console.log("searched for " + searchStr);
 
-    fetch('http://ip-api.com/json/' + searchStr).then(res => res.json()).then(ipSearchJson => {
+    fetch('http://ip-api.com/json/' + searchStr + '?lang=de').then(res => res.json()).then(ipSearchJson => {
         createIpResult(ipSearchJson);
     })
 }
 
 
 // create IP Result
-function createIpResult(ipSearchJson){
+function createIpResult(ipSearchJson) {
+    let success = ipSearchJson.status;
+    if (success == 'success') {
+        document.getElementById('createMapsContent').innerHTML = '';
 
-    document.getElementById('createContent').innerHTML = '';
+        document.getElementById('resultTableIp').setAttribute('style', 'display: block');
+
+        document.getElementById('ipquery').innerHTML = ipSearchJson.query;
+        document.getElementById('ipcountry').innerHTML = ipSearchJson.country;
+        document.getElementById('ipcity').innerHTML = ipSearchJson.zip + ' ' + ipSearchJson.city;
+        document.getElementById('ipregion').innerHTML = ipSearchJson.regionName;
+        document.getElementById('ipisp').innerHTML = ipSearchJson.isp;
+        document.getElementById('iptime').innerHTML = ipSearchJson.timezone;
 
 
-    let ipText = document.createElement('p');
-    ipText.innerHTML = ipSearchJson.query;
+        
 
 
-    let mapContainer = document.createElement('div');
-    mapContainer.setAttribute('id', 'map');
-    mapContainer.style.height = '400px';
-    mapContainer.style.width = '100%';
-    
+        let mapContainer = document.createElement('div');
+        mapContainer.setAttribute('id', 'map');
+        mapContainer.style.height = '400px';
+        mapContainer.style.width = '100%';
 
-    document.getElementById('createContent').appendChild(ipText);
-    document.getElementById('createContent').appendChild(mapContainer);
 
-    console.log(ipSearchJson.lat)
-    console.log(ipSearchJson.lon)
-    
-    
-    //loadGoogleMapsAPI(() => initMap(ipSearchJson.lat, ipSearchJson.lon));
-    console.log("Vor dem Aufruf von loadGoogleMapsAPI");
-    loadGoogleMapsAPI(() => {
-        console.log("Callback von loadGoogleMapsAPI wird ausgeführt");
-        console.log("Übergebene Werte:", ipSearchJson.lat, ipSearchJson.lon);
-        initMap(ipSearchJson.lat, ipSearchJson.lon);
-    });
+        
+        document.getElementById('createMapsContent').appendChild(mapContainer);
+
+        console.log(ipSearchJson.lat)
+        console.log(ipSearchJson.lon)
+
+
+        //loadGoogleMapsAPI(() => initMap(ipSearchJson.lat, ipSearchJson.lon));
+        console.log("Vor dem Aufruf von loadGoogleMapsAPI");
+        loadGoogleMapsAPI(() => {
+            console.log("Callback von loadGoogleMapsAPI wird ausgeführt");
+            console.log("Übergebene Werte:", ipSearchJson.lat, ipSearchJson.lon);
+            initMap(ipSearchJson.lat, ipSearchJson.lon);
+        });
+    } else {
+
+        document.getElementById('createMapsContent').innerHTML = '';
+
+        let ipFailed = document.createElement('p');
+        ipFailed.innerHTML = 'Bitte gebe eine Korrekte IP-Adresse oder Domain ein und versuche es erneut';
+        document.getElementById('createMapsContent').appendChild(ipFailed);
+
+        document.getElementById('resultTableIp').setAttribute('style', 'display: none');
+    }
 }
 
 // fetch dns data
-function searchDns(){
+function searchDns() {
     console.log('dns api called');
 
     fetch('http://edns.ip-api.com/json').then(res => res.json()).then(dnsSearchJson => {
@@ -57,7 +76,7 @@ function searchDns(){
 }
 
 
-function createDnsResult(dnsSearchJson){
+function createDnsResult(dnsSearchJson) {
 
     // split information from Json "geo" into isp and location
     let inputParts = dnsSearchJson.dns.geo.split('-');
@@ -69,7 +88,7 @@ function createDnsResult(dnsSearchJson){
     document.getElementById('dnsisp').innerHTML = isp;
     document.getElementById('dnsgeo').innerHTML = geo;
 
-    
+
 
 }
 
@@ -98,12 +117,12 @@ function initMap(lat, lon) {
     const mapElement = document.getElementById('map');
     const map = new google.maps.Map(mapElement, {
         zoom: 12,
-        center: {lat: lat, lng: lon},
+        center: { lat: lat, lng: lon },
     });
 
     // Marker hinzufügen
     const marker = new google.maps.Marker({
-        position: {lat: lat, lng: lon},
+        position: { lat: lat, lng: lon },
         map: map,
         title: "Standort"
     });
