@@ -1,4 +1,3 @@
-
 let googleMapsLoaded = false;
 
 // fetch ip data
@@ -58,7 +57,9 @@ function createIpResult(ipSearchJson) {
 
         document.getElementById('createMapsContent').innerHTML = '';
 
-        let ipFailed = document.createElement('p');
+        let ipFailed = document.createElement('div');
+        ipFailed.setAttribute('class', 'alert alert-danger mt-4');
+        ipFailed.setAttribute('role', 'alert');
         ipFailed.innerHTML = 'Bitte gebe eine Korrekte IP-Adresse oder Domain ein und versuche es erneut';
         document.getElementById('createMapsContent').appendChild(ipFailed);
 
@@ -126,4 +127,8 @@ function initMap(lat, lon) {
         map: map,
         title: "Standort"
     });
+}
+
+function notReady() {
+    
 }
