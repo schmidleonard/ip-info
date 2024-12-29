@@ -33,7 +33,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="/html/whatisip.html">Was ist IP?</a></li>
-              <li><a class="dropdown-item" href="/html/ipquiz.html">IP-Quiz</a></li>
+              <li><a class="dropdown-item disabled" aria-disabled="true" href="/html/ipquiz.html">IP-Quiz <span class="badge text-bg-warning">Comming Soon!</span></a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -46,7 +46,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="/html/whatisdns.html">Was ist DNS?</a></li>
-              <li><a class="dropdown-item" href="/html/dnsquiz.html">DNS-Quiz</a></li>
+              <li><a class="dropdown-item disabled" aria-disabled="true" href="/html/dnsquiz.html">DNS-Quiz <span class="badge text-bg-warning">Comming Soon!</span></a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -55,12 +55,31 @@
           </li>
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <input class="form-control me-2" type="search" placeholder="Suche" aria-label="Search">
+          <button class="btn btn-outline-primary" onclick="notReady()" type="button" data-bs-toggle="modal" data-bs-target="#notReadyModal">Suche</button>
         </form>
       </div>
     </div>
   </nav>
+  <!-- Modal -->
+<div class="modal fade" id="notReadyModal" tabindex="-1" aria-labelledby="notReadyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="notReadyModalLabel">Dieses Feature ist leider nicht vorhanden!</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Diese Seite wird stetig weiterentwickelt und viele Funktionen wurden noch nicht fertig entwickelt. Falls du mehr über zukünftige Features wissen möchtest besuche die FAQs Seite!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Schließen</button>
+        <a href="/html/faq.html" class="btn btn-success" role="button">Ab zu den FAQs!</a>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!--CONTENT-->
 
   <div class="container">
@@ -77,11 +96,11 @@
     </div>
   </div>
 
-  <!--Suche-->
+ <!--Suche-->
 
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-6 col-xxl-3 col-lg-4">
+      <div class="col-md-6 col-xxl-3 col-lg-4 mb-2">
         <input id="searchInput" type="text" class="form-control" placeholder="Gib eine IP Adresse oder Domain ein">
       </div>
       <div class="col-md-2 ">
@@ -89,7 +108,7 @@
       </div>
     </div>
   </div>
-  
+
 
   <!--Ergbenis-->
   <div class="container">
