@@ -69,7 +69,8 @@ function createIpResult(ipSearchJson) {
 
 
                 let dogText = document.createElement('p')
-                dogText.innerHTML = 'Damit du nicht traurig bist, hier ein Hundebild :)'
+                dogText.innerHTML = 'Damit du nicht traurig bist, hier ein Hundebild :)';
+                document.getElementById('createMapsContent').appendChild(dogText);
                 document.getElementById('createMapsContent').appendChild(dogImg);
 
             })
