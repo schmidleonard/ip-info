@@ -18,6 +18,7 @@ function searchIpInfo() {
 function createIpResult(ipSearchJson) {
     let success = ipSearchJson.status;
     if (success == 'success') {
+        //clear old Results and fill table with content
         document.getElementById('createMapsContent').innerHTML = '';
 
         document.getElementById('resultTableIp').setAttribute('style', 'display: block');
@@ -29,24 +30,17 @@ function createIpResult(ipSearchJson) {
         document.getElementById('ipisp').innerHTML = ipSearchJson.isp;
         document.getElementById('iptime').innerHTML = ipSearchJson.timezone;
 
-
-        
-
-
+        //create Google Maps Map
         let mapContainer = document.createElement('div');
         mapContainer.setAttribute('id', 'map');
         mapContainer.style.height = '400px';
         mapContainer.style.width = '100%';
 
-
-        
         document.getElementById('createMapsContent').appendChild(mapContainer);
 
         console.log(ipSearchJson.lat)
         console.log(ipSearchJson.lon)
 
-
-        //loadGoogleMapsAPI(() => initMap(ipSearchJson.lat, ipSearchJson.lon));
         console.log("Vor dem Aufruf von loadGoogleMapsAPI");
         loadGoogleMapsAPI(() => {
             console.log("Callback von loadGoogleMapsAPI wird ausgeführt");
@@ -54,7 +48,7 @@ function createIpResult(ipSearchJson) {
             initMap(ipSearchJson.lat, ipSearchJson.lon);
         });
     } else {
-
+        // Print Error Message
         document.getElementById('createMapsContent').innerHTML = '';
 
         let ipFailed = document.createElement('div');
@@ -64,6 +58,24 @@ function createIpResult(ipSearchJson) {
         document.getElementById('createMapsContent').appendChild(ipFailed);
 
         document.getElementById('resultTableIp').setAttribute('style', 'display: none');
+
+        //fetch Dog Api
+        try {
+            fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json()).then(dogJson => {
+                let dogImg = document.createElement('img');
+                dogImg.setAttribute('src', dogJson.message);
+                dogImg.setAttribute('alt', 'Ein Random Hundebild');
+                dogImg.setAttribute('class', 'rounded mx-auto d-block');
+
+
+                let dogText = document.createElement('p')
+                dogText.innerHTML = 'Damit du nicht traurig bist, hier ein Hundebild :)'
+                document.getElementById('createMapsContent').appendChild(dogImg);
+
+            })
+        } catch (error) {
+            console.error("dog api couldnt load:", error.message);
+        }
     }
 }
 
@@ -93,6 +105,7 @@ function createDnsResult(dnsSearchJson) {
 
 }
 
+//Google Maps API
 function loadGoogleMapsAPI(callback) {
     if (googleMapsLoaded) {
         callback();
@@ -129,6 +142,3 @@ function initMap(lat, lon) {
     });
 }
 
-function notReady() {
-    
-}
