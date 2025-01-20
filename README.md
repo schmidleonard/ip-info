@@ -25,6 +25,7 @@ Clone the repository:
     git clone https://github.com/schmidleonard/ip-info.git
 
     Open the index.html file in your preferred web browser.
+To use the goole maps API, a key must be created at https://console.cloud.google.com and integrated into script.js.
 
 ## Usage
 Navigate through the various sections of the website to learn more about IP addresses, domains, and DNS. Use the IP address search to obtain information about specific IP addresses or domains.
