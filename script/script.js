@@ -115,7 +115,7 @@ function loadGoogleMapsAPI(callback) {
 
     console.log("loadGoogleMapsAPI aufgerufen");
     let script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBeJLY88Z0YpMHP3NXuSnNuZNsUmAfhdgg&callback=googleMapsCallback`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=API_KEY=googleMapsCallback`;
     script.async = true;
     window.googleMapsCallback = () => {
         console.log("Google Maps API geladen, Callback wird ausgeführt");
